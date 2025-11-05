@@ -1,0 +1,146 @@
+############################
+# OS-specific junk
+############################
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+############################
+# Python
+############################
+
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pyo
+*.pyd
+*.so
+
+# Virtual env
+venv/
+.env/
+.env.*/
+.venv
+.venv*/
+ENV/
+env/
+env.bak/
+
+# Python packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+############################
+# C / C++ / Build
+############################
+
+# Compiled object files
+*.o
+*.obj
+*.lo
+*.la
+*.lai
+*.mod
+*.smod
+
+# Precompiled headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+*.lai
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.elf
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+CTestTestfile.cmake
+Testing/
+install_manifest.txt
+
+# Meson / Ninja
+build.ninja
+.ninja_deps
+.ninja_log
+
+# Generic build dirs
+build/
+build-*/
+bin/
+obj/
+out/
+
+############################
+# Logs & temp files
+############################
+
+*.log
+logs/
+*.tmp
+*.temp
+*.swp
+*.swo
+
+############################
+# IDE / Editor settings
+############################
+
+# VS Code
+.vscode/
+.history/
+*.code-workspace
+
+# JetBrains (CLion, PyCharm, etc.)
+.idea/
+*.iml
+
+# Eclipse / CDT
+.project
+.cproject
+.settings/
+
+# Others
+*.orig
+*.bak
+
+############################
+# Jupyter (if you ever use it)
+############################
+
+.ipynb_checkpoints/
+
+# ROS2
+build/
+install/
+log/
