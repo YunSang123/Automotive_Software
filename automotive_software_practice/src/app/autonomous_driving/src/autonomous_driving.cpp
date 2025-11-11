@@ -197,7 +197,8 @@ void AutonomousDriving::Run(const rclcpp::Time &current_time) {
         std::cout << "[MODE] Manual Longitudinal Input Mode" << std::endl;
     } else {
         std::pair<double, double> accel_brake_command;
-        accel_brake_command = AutonomousDriving::LongitudinalControl(vehicle_state, limit_speed);
+        double velocity_final = AutonomousDriving::PlanVelocity(driving_way, limit_speed);
+        accel_brake_command = AutonomousDriving::LongitudinalControl(vehicle_state, velocity_final);
         vehicle_command.accel = accel_brake_command.first;
         vehicle_command.brake = accel_brake_command.second;
         std::cout << "[MODE] PID Longitudinal Input Mode" << std::endl;
@@ -296,6 +297,19 @@ ad_msgs::msg::PolyfitLaneData AutonomousDriving::FindDrivingWay(const ad_msgs::m
     return driving_way;
 }
 
+double AutonomousDriving::PlanVelocity(ad_msgs::msg::PolyfitLaneData &driving_way, double &limit_speed) {
+
+    // Calculate velocity using kappa
+    double kappa = 2*driving_way.a2;
+    // std::cout << "kappa : " << kappa << std::endl;
+    double velocity_kappa = sqrt(param_max_lateral_accel_/abs(kappa));
+    // std::cout << "velocity_kappa : " << velocity_kappa << std::endl;
+    std::cout << "(v_r, v_k) : (" << limit_speed << ", " << velocity_kappa << ")" << std::endl;
+    double velocity_final = min(velocity_kappa, limit_speed);
+
+    return velocity_final;
+}
+
 double AutonomousDriving::LateralControl(const ad_msgs::msg::VehicleOutput &vehicle_state,
                                           const ad_msgs::msg::PolyfitLaneData &driving_way) {
     /**
@@ -354,11 +368,7 @@ std::pair<double, double> AutonomousDriving::LongitudinalControl(const ad_msgs::
     // [Error] Calculate speed error, cumulative error, and derivative error
 
     double speed_error = reference_speed - vehicle_state.velocity;
-    speed_error_integral_ += speed_error;
-
-    param_pid_kp_ = 3.0;
-    param_pid_ki_ = 1.0;
-    param_pid_kd_ = 2.0;
+    speed_error_integral_ += speed_error * dt;
     
     double command = param_pid_kp_ * speed_error + param_pid_ki_ * speed_error_integral_ + param_pid_kd_ * (speed_error - speed_error_prev_) / dt;
     speed_error_prev_ = speed_error;
@@ -366,7 +376,7 @@ std::pair<double, double> AutonomousDriving::LongitudinalControl(const ad_msgs::
         accel_command = command;
     }
     else {
-        brake_command = command;
+        brake_command = -command;
     }
     // [PID Control] Calculate acceleration, brake commands using PID formula
     // Parameters of PID is initialized in autonomous_driving.hpp: param_pid_kp_, param_pid_ki_, param_pid_kd_

@@ -68,6 +68,8 @@ class AutonomousDriving : public rclcpp::Node {
 
         double LateralControl(const ad_msgs::msg::VehicleOutput &vehicle_state,
                                             const ad_msgs::msg::PolyfitLaneData &driving_way);
+
+        double PlanVelocity(ad_msgs::msg::PolyfitLaneData &driving_way, double &limit_speed);
         
         std::pair<double, double> LongitudinalControl(const ad_msgs::msg::VehicleOutput &vehicle_state,
                                               const double &reference_speed);
