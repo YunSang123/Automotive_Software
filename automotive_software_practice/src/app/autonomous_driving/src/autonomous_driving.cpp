@@ -307,6 +307,11 @@ double AutonomousDriving::PlanVelocity(ad_msgs::msg::PolyfitLaneData &driving_wa
     std::cout << "(v_r, v_k) : (" << limit_speed << ", " << velocity_kappa << ")" << std::endl;
     double velocity_final = min(velocity_kappa, limit_speed);
 
+    // delta_t는 프로그램에서 정의한 Hz를 참고해서 설정.
+    // clamp(velocity_final, prev_velocity_ - param_max_longitudinal_accel_ * delta_t, prev_velocity_ + param_max_longitudinal_accel_ * delta_t)
+
+    prev_velocity_ = velocity_final;
+
     return velocity_final;
 }
 

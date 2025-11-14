@@ -153,6 +153,7 @@ class AutonomousDriving : public rclcpp::Node {
         bool param_use_manual_inputs_ = false;
         const double param_wheel_base_ = 1.302 + 1.398; // L_f + L_r
         const double param_max_lateral_accel_ = 6200.0 / 1319.91; // Fyf_max / Mass
+        const double param_max_longitudinal_accel_ = 3.0;
 
         // Tuning parameters
         double param_pp_kd_ = 1.0;
@@ -172,6 +173,9 @@ class AutonomousDriving : public rclcpp::Node {
         // Algorhtm variables
         double speed_error_integral_ = 0.0;
         double speed_error_prev_     = 0.0;
+
+        // Velocity planning
+        double prev_velocity_ = 0;
 
 };
 
